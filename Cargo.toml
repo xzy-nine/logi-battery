@@ -1,0 +1,74 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/openlogi-core",
+    "crates/openlogi-device-registry",
+    "crates/openlogi-hidpp",
+    "crates/openlogi-hidpp-derive",
+    "crates/openlogi-hid",
+    "crates/openlogi-device",
+]
+default-members = ["."]
+
+[package]
+name = "logi-battery"
+version = "0.1.0"
+edition = "2024"
+description = "Logitech device battery reader library"
+license = "MIT"
+
+[lib]
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[dependencies]
+openlogi-core = { path = "crates/openlogi-core", default-features = false }
+openlogi-hidpp = { path = "crates/openlogi-hidpp" }
+openlogi-hid = { path = "crates/openlogi-hid" }
+openlogi-device = { path = "crates/openlogi-device" }
+anyhow = "1"
+tokio = { version = "1", features = ["rt", "macros", "sync", "time"] }
+async-hid = { workspace = true }
+futures-lite = { workspace = true }
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+repository = ""
+authors = []
+
+[workspace.dependencies]
+hidpp = { package = "openlogi-hidpp", path = "crates/openlogi-hidpp" }
+openlogi-device-registry = { path = "crates/openlogi-device-registry" }
+async-hid = { package = "openlogi-async-hid", version = "=0.5.3-openlogi.1" }
+windows-sys = "0.61"
+tokio = { version = "1", default-features = false, features = ["rt", "macros", "sync", "time"] }
+futures-lite = "2"
+futures = "0.3"
+futures-concurrency = "7"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+toml_edit = "0.22"
+anyhow = "1"
+thiserror = "2"
+num_enum = "0.7.3"
+tracing = "0.1"
+atomic-write-file = "0.3.0"
+etcetera = "0.11.0"
+objc2-io-kit = { version = "0.3.2", default-features = false }
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+
+[profile.dev]
+debug = "limited"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+strip = "symbols"
